@@ -1,67 +1,63 @@
 import { Component, OnInit } from '@angular/core';
-import { TaskService } from '../task/services/task.service';
-import { Task } from '../task/task';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+export interface Task {
+  id: number;
+  name: string;
+}
 
 @Component({
   selector: 'app-task-list',
-  templateUrl: './task-list.html',
-  styleUrl: './task-list.css'
+  standalone: true,
+  templateUrl: './task-list.component.html',
+  styleUrls: ['./task-list.component.css'],
+  imports: [CommonModule, FormsModule],
 })
-export class TaskListComponent implements OnInit{
-  tasks: Task [] = [];
+export class TaskListComponent implements OnInit {
+  tasks: Task[] = [];
   newTaskName: string = '';
   editingTask: Task | null = null;
 
-  constructor(private taskService: TaskService) {}
-
-  ngOnInit(){
-      this.loadTasks();
+  ngOnInit(): void {
+    // Optionally initialize with dummy tasks
+    this.tasks = [
+      { id: 1, name: 'Example Task 1' },
+      { id: 2, name: 'Example Task 2' },
+    ];
   }
 
-  loadTasks() {
-    this.taskService.getTasks().subscribe({
-      next: (data) => this.tasks = data,
-      error: (err) => console.error('Error fetching tasks', err)
-    });
+  addTask(): void {
+    if (!this.newTaskName.trim()) return;
+
+    const newTask: Task = {
+      id: this.tasks.length ? Math.max(...this.tasks.map(t => t.id)) + 1 : 1,
+      name: this.newTaskName.trim(),
+    };
+
+    this.tasks.push(newTask);
+    this.newTaskName = '';
   }
 
-  addTask(): void{
-    if(!this.newTaskName.trim()) return;
-    const task: Task = {id: 0, name: this.newTaskName}
-    this.taskService.addTask(task).subscribe({
-      next: (t) => {
-        this.tasks.push(t);
-        this.newTaskName = '';
-      },
-      error: (err) => console.error('Error adding task',err)
-    });
+  editTask(task: Task): void {
+    this.editingTask = { ...task }; // create a copy for editing
   }
 
-  deleteTask(task: Task): void{
-    this.taskService.deleteTask(task.id!).subscribe({
-      next: () => this.tasks = this.tasks.filter(t => t.id !== task.id),
-      error: (err) => console.error('Error deleting task', err)
-    });
+  saveTask(): void {
+    if (this.editingTask) {
+      const index = this.tasks.findIndex(t => t.id === this.editingTask!.id);
+      if (index > -1) {
+        this.tasks[index] = this.editingTask;
+      }
+      this.editingTask = null;
+    }
   }
 
-  startEditing(task: Task): void{
-    this.editingTask = {...task}; //makes it so that dont instantly reflect in the list.
+  cancelEdit(): void {
+    this.editingTask = null;
   }
 
-  updateTask(): void{
-    if(!this.editingTask) return;
-    this.taskService.updateTask(this.editingTask).subscribe({
-      next: (updated) => {
-        const index = this.tasks.findIndex(t => t.id === updated.id);
-        if (index >= 0){
-          this.tasks[index] = updated;
-        }
-        this.editingTask = null;
-      },
-      error: (err) => console.error('Error updating task', err)
-    });
+  deleteTask(task: Task): void {
+    this.tasks = this.tasks.filter(t => t.id !== task.id);
   }
-
-
-
 }
