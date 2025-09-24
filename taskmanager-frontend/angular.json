@@ -13,7 +13,8 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "browser": "src/main.ts",
+            "outputPath": "dist/taskmanager-frontend",
+            "baseHref": "./",
             "polyfills": [
               "zone.js"
             ],

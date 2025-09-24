@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-export interface Task {
-  id: number;
-  name: string;
-}
+import { TaskService } from '../task/services/task.service';
+import { Task } from '../task/task';
 
 @Component({
   selector: 'app-task-list',
@@ -14,29 +11,32 @@ export interface Task {
   styleUrls: ['./task-list.component.css'],
   imports: [CommonModule, FormsModule],
 })
+
 export class TaskListComponent implements OnInit {
   tasks: Task[] = [];
-  newTaskName: string = '';
+  newTaskTitle: string = '';
+  newTaskDescription: string = '';
   editingTask: Task | null = null;
+
+  constructor(private taskService: TaskService){}
 
   ngOnInit(): void {
     // Optionally initialize with dummy tasks
-    this.tasks = [
-      { id: 1, name: 'Example Task 1' },
-      { id: 2, name: 'Example Task 2' },
-    ];
+    this.loadTasks();
   }
 
+  loadTasks(): void{
+    this.taskService.getTasks().subscribe(tasks => this.tasks = tasks);
+  }
   addTask(): void {
-    if (!this.newTaskName.trim()) return;
+    if (!this.newTaskTitle.trim()) return;
 
-    const newTask: Task = {
-      id: this.tasks.length ? Math.max(...this.tasks.map(t => t.id)) + 1 : 1,
-      name: this.newTaskName.trim(),
-    };
-
-    this.tasks.push(newTask);
-    this.newTaskName = '';
+    const newTask: Task = {title: this.newTaskTitle, description: this.newTaskDescription, status: "TODO"};
+    this.taskService.addTask(newTask).subscribe(task => {
+      this.tasks.push(task);
+      this.newTaskTitle = '';
+      this.newTaskDescription = '';
+    });
   }
 
   editTask(task: Task): void {
@@ -45,19 +45,25 @@ export class TaskListComponent implements OnInit {
 
   saveTask(): void {
     if (this.editingTask) {
-      const index = this.tasks.findIndex(t => t.id === this.editingTask!.id);
-      if (index > -1) {
-        this.tasks[index] = this.editingTask;
-      }
-      this.editingTask = null;
+      this.taskService.updateTask(this.editingTask).subscribe(updatedTask => {
+        const index = this.tasks.findIndex(t => t.id === updatedTask.id);
+        if (index > -1) {
+          this.tasks[index] = updatedTask;
+        }
+        this.editingTask = null;
+      });
     }
   }
+
 
   cancelEdit(): void {
     this.editingTask = null;
   }
 
   deleteTask(task: Task): void {
+  this.taskService.deleteTask(task.id!).subscribe(() => {
     this.tasks = this.tasks.filter(t => t.id !== task.id);
+  });
   }
+
 }

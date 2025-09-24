@@ -1,13 +1,15 @@
 <!-- Add new task -->
-<input [(ngModel)]="newTaskName" placeholder="New Task" />
+<input [(ngModel)]="newTaskTitle" placeholder="New Task" />
+<input [(ngModel)]="newTaskDescription" placeholder="Task Description" />
 <button (click)="addTask()">Add Task</button>
 
 <!-- Task list -->
 <ul>
   <li *ngFor="let task of tasks">
     <!-- Show input if editing -->
-    <div *ngIf="editingTask">
-        <input [(ngModel)]="editingTask.name" />
+    <div *ngIf="editingTask?.id === task.id">
+        <input [(ngModel)]="editingTask!.title" placeholder="Task Title" />
+        <input [(ngModel)]="editingTask!.description" placeholder="Task Description" />
         <button (click)="saveTask()">Save</button>
         <button (click)="cancelEdit()">Cancel</button>
 </div>
@@ -15,9 +17,9 @@
 
     <!-- Show task name if not editing -->
     <div *ngIf="editingTask?.id !== task.id">
-        {{ task.name }}
-        <button (click)="editTask(task)">Edit</button>
-        <button (click)="deleteTask(task)">Delete</button>
+      {{ task.title }} - {{ task.description }}
+      <button (click)="editTask(task)">Edit</button>
+      <button (click)="deleteTask(task)">Delete</button>
     </div>
   </li>
 </ul>
