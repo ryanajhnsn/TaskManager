@@ -1,0 +1,20 @@
+{
+  "name": "taskmanager",
+  "version": "1.0.0",
+  "main": "main.js",
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "electron": "^38.1.2",
+    "electron-reload": "^1.2.1",
+    "wait-on": "^9.0.0"
+  },
+"scripts": {
+  "ng:build-once": "cd taskmanager-frontend && ng build --configuration development",
+  "ng:watch": "cd taskmanager-frontend && ng build --watch --configuration development",
+  "electron:start": "npx electron .",
+  "start": "npm run ng:build-once && concurrently \"npm run ng:watch\" \"npm run electron:start\""
+}
+
+
+
+}
