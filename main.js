@@ -4,7 +4,7 @@ const path = require('path');
 // Hot reload
 try {
   require('electron-reload')(
-    path.join(__dirname, 'taskmanager-frontend/dist/taskmanager-frontend/browser'),
+    path.join(__dirname, 'taskmanager-frontend/dist/taskmanager-frontend/browser'), 
     {
       electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
       hardResetMethod: 'exit'
@@ -22,9 +22,9 @@ function createWindow() {
     }
   });
 
-  // Load Angular output (with browser folder)
+  // Load Angular output (without browser folder)
   win.loadFile(
-    path.join(__dirname, 'taskmanager-frontend/dist/taskmanager-frontend/browser/index.html')
+    path.join(__dirname, 'taskmanager-frontend/dist/taskmanager-frontend/browser/index.html') 
   );
 
   win.webContents.openDevTools();
