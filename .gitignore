@@ -39,6 +39,8 @@ application.properties
 # dependencies
 /node_modules
 /taskmanager-frontend/node_modules/
+node_modules/
+taskmanager-frontend/node_modules/
 
 # build output
 dist/
