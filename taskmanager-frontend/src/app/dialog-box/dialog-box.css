@@ -1,0 +1,20 @@
+
+.mat-mdc-dialog-surface {
+    overflow-y: hidden !important;
+}
+.cdk-global-scrollblock {
+    overflow-y: hidden !important;
+}
+.mat-dialog-content {
+  background-color: #eff2f5;
+  display: block;
+  margin: 0 -24px;
+  padding: 0 24px;
+  max-height: 109vh;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+}
+
+::ng-deep .mat-mdc-dialog-surface::-webkit-scrollbar {
+  display: none !important;
+}

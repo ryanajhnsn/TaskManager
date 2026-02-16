@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>Add Task</h2>
+<mat-dialog-content>
+    <div>
+        <mat-form-field>
+            <mat-label>Title</mat-label>
+            <input matInput [(ngModel)]="task.title" placeholder="Title" >
+            <mat-icon matSuffix>person</mat-icon>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea matInput [(ngModel)]="task.description" placeholder="Description"></textarea>
+            <mat-icon matSuffix>person</mat-icon>
+        </mat-form-field>
+    </div>
+    <div>
+    <mat-form-field>
+        <mat-label>Status</mat-label>
+        <select matNativeControl required matInput [(ngModel)]="task.status" >
+            <option value = "TODO">To Do</option>
+            <option value = "IN_PROGRESS">In progress</option>
+            <option value = "DONE">Done</option>
+
+        </select>
+    </mat-form-field>
+    </div>
+</mat-dialog-content>
+
+<div style="align-self: flex-end;" class="button-div">
+<button mat-icon-button (click)="close()">
+    <mat-icon>close</mat-icon>
+</button>
+<button mat-icon-button (click)="save()">
+    <mat-icon>check</mat-icon>
+</button>
+</div>
