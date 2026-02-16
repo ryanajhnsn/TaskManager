@@ -1,25 +1,139 @@
-<!-- Add new task -->
-<input [(ngModel)]="newTaskTitle" placeholder="New Task" />
-<input [(ngModel)]="newTaskDescription" placeholder="Task Description" />
-<button (click)="addTask()">Add Task</button>
+<!-- Add new task with dialogbox -->
 
-<!-- Task list -->
-<ul>
-  <li *ngFor="let task of tasks">
-    <!-- Show input if editing -->
-    <div *ngIf="editingTask?.id === task.id">
-        <input [(ngModel)]="editingTask!.title" placeholder="Task Title" />
-        <input [(ngModel)]="editingTask!.description" placeholder="Task Description" />
-        <button (click)="saveTask()">Save</button>
-        <button (click)="cancelEdit()">Cancel</button>
+<div class="task-header-div">
+  <span>Task Manager</span>
+  <span class="toolbar-spacer"></span>
+  <button matIconButton class="add-task-button" 
+    (click)="openAddTaskDialogBox()"
+    matTooltip="Add New Task">
+    <mat-icon>add </mat-icon>
+  </button>
 </div>
 
+<!-- Grid Headers -->
+<mat-grid-list cols="3" rowHeight="50px" class="grid-headers" [gutterSize]="'0px'">
+<mat-grid-tile class="to-do-title">
+  <mat-icon>lightbulb</mat-icon>
+    To Do
+</mat-grid-tile>
+
+<mat-grid-tile class="in-progress-title">
+  <mat-icon>construction</mat-icon>
+    In Progress
+</mat-grid-tile>
+
+<mat-grid-tile class="done-title">
+  <mat-icon>done</mat-icon>
+    Done
+</mat-grid-tile>
+
+</mat-grid-list>
+
+<!-- Task lists -->
+
+ <div class ="task-list-div" style="height: 100vh;" >
+  <mat-grid-list class="task-list-tile" cols="3" rowHeight="100%" [gutterSize]="'0px'">
+
+ <!-- TO DO TASKS -->   
+  <mat-grid-tile class="to-do-grid">
+
+    <ul>
+      <li *ngFor="let task of tasks" (contextmenu)="onRightClick($event, task, menuTrigger)">
+
+    <!-- Show input if editing -->
+    <div *ngIf="editingTask?.id === task.id&& task.status === 'TODO'">
+        <input [(ngModel)]="editingTask!.title" placeholder="Task Title" />
+        <input [(ngModel)]="editingTask!.description" placeholder="Task Description" />
+        <button matButton="filled" (click)="saveTask()" [disableRipple]="true">Save</button>
+        <button matButton="filled" (click)="cancelEdit()" [disableRipple]="true">Cancel</button>
+    </div>
+    <!-- Show task name if not editing -->
+    <div *ngIf="editingTask?.id !== task.id && task.status === 'TODO'" >
+        <a class="task-title">{{ task.title }} </a> 
+      <button matIconButton (click)="updateStatus(task, 'IN_PROGRESS')" [disableRipple]="true">
+      <mat-icon>arrow_forward</mat-icon>
+      </button>
+      <br>
+        <a class="task-description">{{ task.description }}</a>
+        
+    </div>
+    
+  </li>
+</ul>
+</mat-grid-tile>
+
+  <!-- IN PROGRESS TASKS -->
+  <mat-grid-tile class="in-progress-grid">
+    
+    <ul>
+      <li *ngFor="let task of tasks" (contextmenu)="onRightClick($event, task, menuTrigger)">
+
+    <!-- Show input if editing -->
+    <div *ngIf="editingTask?.id === task.id && task.status === 'IN_PROGRESS'">
+      <mat-form-field>
+        <input matInput [(ngModel)]="editingTask!.title">
+      </mat-form-field>
+        
+        <textarea matInput [(ngModel)]="editingTask!.description" placeholder="Task Description"></textarea>
+        <button matButton="filled" (click)="saveTask()" [disableRipple]="true">Save</button>
+        <button matButton="filled" (click)="cancelEdit()" [disableRipple]="true">Cancel</button>
+    </div>
 
     <!-- Show task name if not editing -->
-    <div *ngIf="editingTask?.id !== task.id">
-      {{ task.title }} - {{ task.description }}
-      <button (click)="editTask(task)">Edit</button>
-      <button (click)="deleteTask(task)">Delete</button>
+    <div *ngIf="editingTask?.id !== task.id && task.status === 'IN_PROGRESS'" >
+      <button matIconButton (click)="updateStatus(task, 'TODO')" [disableRipple]="true">
+      <mat-icon>arrow_back</mat-icon>
+      </button> 
+       <a class="task-title">{{ task.title }} </a> 
+      <button matIconButton (click)="updateStatus(task, 'DONE')" [disableRipple]="true">
+      <mat-icon>arrow_forward</mat-icon>
+      </button>
+      <br>
+        <a class="task-description">{{ task.description }}</a>
+    </div>
+    
+  </li>
+</ul>
+  </mat-grid-tile>
+  
+  <!-- COMPLETED TASKS -->
+  <mat-grid-tile class="done-grid">
+    <ul>
+      <li *ngFor="let task of tasks" (contextmenu)="onRightClick($event, task, menuTrigger)">
+    <!-- Show input if editing -->
+    <div *ngIf="editingTask?.id === task.id && task.status === 'DONE'">
+        <input [(ngModel)]="editingTask!.title" placeholder="Task Title" />
+        <input [(ngModel)]="editingTask!.description" placeholder="Task Description" />
+        <button matButton="filled" (click)="saveTask()" [disableRipple]="true">Save</button>
+        <button matButton="filled" (click)="cancelEdit()" [disableRipple]="true">Cancel</button>
+    </div>
+
+    <!-- Show task name if not editing -->
+    <div *ngIf="editingTask?.id !== task.id && task.status === 'DONE'" >
+      <button matIconButton (click)="updateStatus(task, 'IN_PROGRESS')" [disableRipple]="true">
+      <mat-icon>arrow_back</mat-icon>
+      </button> 
+        <a class="task-title">{{ task.title }} </a> 
+      <br>
+        <a class="task-description">{{ task.description }}</a>
     </div>
   </li>
 </ul>
+  </mat-grid-tile>
+</mat-grid-list>
+</div>
+
+
+<!-- Context Menu -->
+<mat-menu #contextMenu="matMenu" [xPosition]="'after'" [yPosition]="'below'">
+  <button mat-menu-item (click)="selectedTask && editTask(selectedTask)">Edit Task</button>
+  <button mat-menu-item (click)="selectedTask && deleteTask(selectedTask)">Delete Task</button>
+</mat-menu>
+
+<div
+  [style.position]="'fixed'"
+  [style.left]="contextMenuPosition.x"
+  [style.top]="contextMenuPosition.y"
+  [matMenuTriggerFor]="contextMenu"
+  #menuTrigger="matMenuTrigger">
+</div>

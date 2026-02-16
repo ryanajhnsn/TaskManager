@@ -1,33 +1,29 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 
-// Hot reload
-try {
-  require('electron-reload')(
-    path.join(__dirname, 'taskmanager-frontend/dist/taskmanager-frontend/browser'), 
-    {
-      electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
-      hardResetMethod: 'exit'
-    }
-  );
-} catch (_) {}
+const isDev = process.env.NODE_ENV !== 'production';
 
 function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
+    menuBarVisible: false,
+    autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
     }
   });
 
-  // Load Angular output (without browser folder)
-  win.loadFile(
-    path.join(__dirname, 'taskmanager-frontend/dist/taskmanager-frontend/browser/index.html') 
-  );
-
-  win.webContents.openDevTools();
+  if (isDev) {
+    // In development, load Angular dev server
+    win.loadURL('http://localhost:4200');
+  } else {
+    // In production, load built files from dist
+    win.loadFile(
+      path.join(__dirname, 'taskmanager-frontend/dist/taskmanager-frontend/browser/index.html')
+    );
+  }
 }
 
 app.whenReady().then(createWindow);

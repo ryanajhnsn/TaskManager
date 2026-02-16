@@ -1,0 +1,119 @@
+@import '@angular/material/prebuilt-themes/rose-red';
+body{
+  font-family: "Times New Roman";
+  font-size: x-large;
+  overflow: hidden;
+}
+.cdk-global-scrollblock{
+  overflow-y: hidden;
+}
+
+.mat-toolbar-row{
+    background-color: blanchedalmond;
+}
+
+.mat-grid-tile {
+  display: flex;
+}
+.task-list-div .mat-grid-tile .mat-grid-tile-content {
+  align-items: flex-start;
+}
+
+.task-header-div{
+  color:rgb(0, 0, 0);
+  background-color: beige;
+  padding: 16px;
+  height: 40px;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  font-size: xx-large;
+}
+
+.grid-headers .mat-grid-tile{
+  padding: 1px;
+}
+.grid-headers .to-do-title{
+  background-color: rgba(224, 146, 29, 0.897);
+}
+.grid-headers .in-progress-title{
+  background-color: rgb(30, 187, 16);
+}
+.grid-headers .done-title{
+  background-color: rgb(15, 135, 216);
+}
+
+.grid-headers .mat-grid-tile .mat-grid-tile-content{
+  justify-content: center !important; 
+  align-items: center !important;
+  display: flex;
+  color: white;
+  font-size:xx-large;
+}
+.task-list-div .div{
+  display: flex;
+}
+.task-list-div .task-list-tile{
+  display: flex;
+}
+.task-list-div .task-list-tile .mat-grid-tile{
+  display: flex;
+  border: 2px black;
+  width: 33.333333% !important;
+}
+.task-list-div .task-list-tile .mat-grid-tile.to-do-grid{
+    background-color: rgba(165, 103, 9, 0.897);
+
+}
+
+.task-list-div .task-list-tile .mat-grid-tile.in-progress-grid{
+  background-color: rgb(22, 156, 10);
+}
+
+.task-list-div .task-list-tile .mat-grid-tile.done-grid{
+  background-color: rgb(0, 119, 199);
+}
+.task-list-div .task-list-tile .mat-grid-tile .mat-grid-tile-content{
+  text-align: center;
+  display: inline-block;
+  overflow: auto;
+  height: calc(100vh - 100px);
+  flex-grow: 1;
+
+}
+.task-list-div .task-list-tile .mat-grid-tile .mat-grid-tile-content ul{
+
+  text-align: center;
+  justify-content: center !important;  
+  list-style-type: none; 
+  padding: 2px; 
+  border: 0px solid red;
+}
+
+.task-list-div .task-list-tile .mat-grid-tile .mat-grid-tile-content li{
+}
+
+.task-list-div .task-list-tile .mat-grid-tile .mat-grid-tile-content div{
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid gray;
+  overflow-wrap: break-word;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin:  8px;
+  background-color: whitesmoke;
+  border-radius: 15px;
+}
+.task-list-div .task-list-tile .mat-grid-tile .mat-grid-tile-content a{
+  padding: 2px 8px;
+  display: inline-block;
+  align-self: center;
+  height: auto;
+  vertical-align: middle;
+}
+
+.task-list-div .task-list-tile .mat-grid-tile .mat-grid-tile-content a.task-description{
+  width: 100%;
+}

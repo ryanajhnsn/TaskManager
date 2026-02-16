@@ -1,4 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/rose-red';
+.main-container .main-drawer{
+  height: 100%;
+  width: 200px;
+  border: 0px solid #ff0000;
+  background: #b7b2be;
+}
+.mat-dialog-content {
+  padding-bottom: 10px !important;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-drawer-content{
+  overflow: hidden !important;
+}
+
+html{
+  overflow: hidden;
+}
